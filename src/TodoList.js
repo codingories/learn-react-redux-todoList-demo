@@ -8,7 +8,6 @@ class TodoList extends Component {
   constructor(props){
     super(props)
     this.state = store.getState()
-    // this.changeInputValue = this.changeInputValue.bind(this)
   }
 
   render() {
@@ -32,7 +31,11 @@ class TodoList extends Component {
     );
   }
   changeInputValue(e){
-    console.log(e.target.value)
+    const action = {
+      type: 'changeInput',
+      value: e.target.value
+    } // 建立action
+    store.dispatch(action)
   }
 }
 
