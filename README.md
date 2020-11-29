@@ -1,70 +1,75 @@
-# Getting Started with Create React App
+# 视频地址,https://www.bilibili.com/video/BV1w441137ss?p=1
+1. redux基础模型
+- 图1
+- redux和flux
+- redux是flux的升级版，flux过时，学会redux即可
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+2. redux工作流程讲解
+- 官方图，理解起来比较复杂
+- 图2
+- 比喻成大保健流程方便理解
+- 图3
 
-## Available Scripts
+3. AntDesign和开发环境初始化
+- 为了不这么难看用于一下AntDesign
+- 如果没装脚手架，先安装 create-react-app脚手架,`npm install -g create-react-app`
+- 新建项目文件夹ReduxDemo,create-react-app demo01
+- 删除无用的文件
+- 安装ant-design,`npm install antd --save`
 
-In the project directory, you can run:
+4. 用Ant Design制作UI界面
+- 图四
+- TodoList.js代码
+```jsx
+import React, {Component} from 'react';
+import 'antd/dist/antd.css'
+import {Button, Input, List} from 'antd'
+const data = ['早10点开晨会','早11点写代码','下午4点开新需求评审会']
+class TodoList extends Component {
+  render() {
+    return (
+      <div style={{margin:'10px'}}>
+        <div>
+          <Input placeholder='Write Something' style={{ width:'250px', marginRight: '10px' }}/>
+          <Button type='primary'>增加</Button>
+          <div style={{margin:'10px',width:'300px'}}>
+            <List border
+                  dataSource={data}
+                  renderItem={item=>(<List.Item>{item}</List.Item>)}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
 
-### `yarn start`
+export default TodoList;
+```
+- index.js代码
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import TodoList from './TodoList'
+ReactDOM.render(
+    <TodoList />,
+  document.getElementById('root')
+);
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+5. 创建Redux中的仓库-store和reducer
+- 安装redux, `npm install --save redux` 或者 `yarn add redux` 
+- 新建src/store/index.js
+```javascript
+// index.js
+import {createStore} from 'redux'
+const store = createStore()
+export default store
+```
+- 初始化最简单的仓库管理员reducer
+```javascript
+const defaultState = {}
+export default (state = defaultState, action)=>{
+  return state
+}
+```
