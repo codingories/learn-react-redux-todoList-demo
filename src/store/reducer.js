@@ -20,8 +20,7 @@ const x = (state = defaultState, action)=>{
   }
   if(action.type==='deleteItem'){
     let newState = JSON.parse(JSON.stringify(state))
-    let i = newState.list.findIndex((i)=>{return i===action.value})
-    newState.list.splice(i,1);
+    newState.list.splice(action.index, 1);
     return newState
   }
   return state

@@ -25,8 +25,10 @@ class TodoList extends Component {
           <div style={{margin:'10px',width:'300px'}}>
             <List bordered
                   dataSource={this.state.list}
-                  renderItem={item=>(<List.Item>{item}</List.Item>)}
-                  onClick={(item)=>{this.clickDelete(item.target.innerHTML)}}
+                  renderItem={(item, index)=>(<List.Item
+                    onClick={()=>this.deleteItem(index)}
+                  >{item}
+                  </List.Item>)}
             />
           </div>
         </div>
@@ -49,13 +51,12 @@ class TodoList extends Component {
     }
     store.dispatch(action)
   }
-  clickDelete = (item)=>{
-    console.log(item)
+  deleteItem = (index)=>{
     const action = {
       type: 'deleteItem',
-      value: item
+      index
     }
-    store.dispatch(action)
+    store.dispatch(action) // 传递到store, reducer
   }
 }
 
