@@ -26,6 +26,7 @@ class TodoList extends Component {
             <List bordered
                   dataSource={this.state.list}
                   renderItem={item=>(<List.Item>{item}</List.Item>)}
+                  onClick={(item)=>{this.clickDelete(item.target.innerHTML)}}
             />
           </div>
         </div>
@@ -45,6 +46,14 @@ class TodoList extends Component {
   clickBtn = ()=>{
     const action = {
       type: 'addItem'
+    }
+    store.dispatch(action)
+  }
+  clickDelete = (item)=>{
+    console.log(item)
+    const action = {
+      type: 'deleteItem',
+      value: item
     }
     store.dispatch(action)
   }
