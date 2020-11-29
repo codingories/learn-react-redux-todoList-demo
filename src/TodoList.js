@@ -21,7 +21,7 @@ class TodoList extends Component {
             onChange={(e)=>this.changeInputValue(e)}
             value={this.state.inputValue}
           />
-          <Button type='primary'>增加</Button>
+          <Button type='primary' onClick={()=>{this.clickBtn()}}>增加</Button>
           <div style={{margin:'10px',width:'300px'}}>
             <List bordered
                   dataSource={this.state.list}
@@ -41,6 +41,12 @@ class TodoList extends Component {
   }
   storeChange = ()=>{
     this.setState(store.getState())
+  }
+  clickBtn = ()=>{
+    const action = {
+      type: 'addItem'
+    }
+    store.dispatch(action)
   }
 }
 
