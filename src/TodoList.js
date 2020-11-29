@@ -9,7 +9,7 @@ class TodoList extends Component {
   constructor(props){
     super(props)
     this.state = store.getState()
-    store.subscribe(this.storeChange)
+    store.subscribe(this.storeChange) // 每次dispatch 都会触发 subscribe中的函数调用
   }
 
   render() {

@@ -8,11 +8,12 @@ const defaultState = {
 }
 
 const x = (state = defaultState, action)=>{
+  // 此处必须是纯函数，即返回的结果由参数决定
   // Reducer里面只能接手state，不能改变state
   if(action.type===CHANGE_INPUT){
     let newState = JSON.parse(JSON.stringify(state))
     newState.inputValue = action.value
-    return newState
+    return newState // 返回给store仓库
   }
   if(action.type===ADD_ITEM){
     let newState = JSON.parse(JSON.stringify(state))
