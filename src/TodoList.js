@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import 'antd/dist/antd.css'
 import {Button, Input, List} from 'antd'
 
-const data = ['早8点开晨会1','早8点开晨会2','早8点开晨会3']
+const data = ['早10点开晨会','早11点写代码','下午4点开新需求评审会']
 
 class TodoList extends Component {
   render() {
@@ -16,7 +16,6 @@ class TodoList extends Component {
                   dataSource={data}
                   renderItem={item=>(<List.Item>{item}</List.Item>)}
             />
-
           </div>
         </div>
       </div>
