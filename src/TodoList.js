@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import 'antd/dist/antd.css'
 import store from './store'
-import { changeInputAction, addItemAction, deleteItemAction } from "./store/actionCreaters"
+import { changeInputAction, addItemAction, deleteItemAction, getListAction } from "./store/actionCreaters"
 import TodoListUI from "./TodoListUI"
+import axios from 'axios'
 
 class TodoList extends Component {
 
@@ -23,6 +24,16 @@ class TodoList extends Component {
       />
     );
   }
+
+  componentDidMount() {
+    axios.get('http://rap2api.taobao.org/app/mock/data/1810019').then((response)=>{
+      console.log(response)
+      const data = response.data
+      const action = getListAction(data)
+      store.dispatch(action)
+    })
+  }
+
   changeInputValue = (e) => {
     const action = changeInputAction(e.target.value)
     store.dispatch(action)
