@@ -2,9 +2,7 @@ import { CHANGE_INPUT, ADD_ITEM, DELETE_ITEM, GET_LIST } from './actionTypes'
 
 const defaultState = {
   inputValue : 'Write Something',
-  list: [
-    '早10点开晨会','早11点写代码','下午4点开新需求评审会'
-  ]
+  list: []
 }
 
 const x = (state = defaultState, action)=>{

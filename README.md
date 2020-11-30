@@ -656,3 +656,161 @@ export default TodoList;
 
 13. 组件UI和业务逻辑的拆分
 - 通过redux将UI和业务逻辑做分离
+
+14. Redux中的无状态组件使用
+- 无状态组件其实就是一个函数,能提升性能
+- 将TodoListUI普通UI组件改写成无状态组件
+```jsx
+import React from 'react';
+import {Button, Input, List} from "antd"
+
+const TodoListUI = (props)=>{
+  return (
+    <div style={{margin:'10px'}}>
+      <div>
+        <Input
+          placeholder={props.inputValue}
+          style={{ width:'250px', marginRight: '10px' }}
+          onChange={props.changeInputValue}
+          value={props.inputValue}
+        />
+        <Button type='primary' onClick={()=>{props.clickBtn()}}>增加</Button>
+        <div style={{margin:'10px',width:'300px'}}>
+          <List bordered
+                dataSource={props.list}
+                renderItem={(item, index)=>(<List.Item
+                  onClick={()=>props.deleteItem(index)}
+                >
+                  {item}
+                </List.Item>)}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default TodoListUI;
+```
+
+15. Axios异步获取数据并和Redux结合
+- 从服务器获取数据渲染列表
+```jsx
+// todoList.js
+import React, {Component} from 'react';
+import 'antd/dist/antd.css'
+import store from './store'
+import { changeInputAction, addItemAction, deleteItemAction, getListAction } from "./store/actionCreaters"
+import TodoListUI from "./TodoListUI"
+import axios from 'axios'
+
+class TodoList extends Component {
+
+  constructor(props){
+    super(props)
+    this.state = store.getState()
+    store.subscribe(this.storeChange) // 每次dispatch 都会触发 subscribe中的函数调用
+  }
+
+  render() {
+    return (
+      <TodoListUI
+        inputValue={this.state.inputValue}
+        changeInputValue={this.changeInputValue}
+        clickBtn={this.clickBtn}
+        list={this.state.list}
+        deleteItem={this.deleteItem}
+      />
+    );
+  }
+
+  componentDidMount() {
+    axios.get('http://rap2api.taobao.org/app/mock/data/1810019').then((response)=>{
+      console.log(response)
+      const data = response.data
+      const action = getListAction(data)
+      store.dispatch(action)
+    })
+  }
+
+  changeInputValue = (e) => {
+    const action = changeInputAction(e.target.value)
+    store.dispatch(action)
+  }
+  clickBtn = ()=>{
+    const action = addItemAction()
+    store.dispatch(action)
+  }
+  deleteItem = (index)=>{
+    const action = deleteItemAction(index)
+    store.dispatch(action) // 传递到store, reducer
+  }
+  storeChange = ()=>{
+    this.setState(store.getState())
+  }
+}
+
+export default TodoList;
+```
+- reducer.js
+```js
+import { CHANGE_INPUT, ADD_ITEM, DELETE_ITEM, GET_LIST } from './actionTypes'
+
+const defaultState = {
+  inputValue : 'Write Something',
+  list: []
+}
+
+const x = (state = defaultState, action)=>{
+  // 此处必须是纯函数，即返回的结果由参数决定
+  // Reducer里面只能接手state，不能改变state
+  if(action.type===CHANGE_INPUT){
+    let newState = JSON.parse(JSON.stringify(state))
+    newState.inputValue = action.value
+    return newState // 返回给store仓库
+  }
+  if(action.type===ADD_ITEM){
+    let newState = JSON.parse(JSON.stringify(state))
+    newState.list.push(newState.inputValue)
+    newState.inputValue = ''
+    return newState
+  }
+  if(action.type===DELETE_ITEM){
+    let newState = JSON.parse(JSON.stringify(state))
+    newState.list.splice(action.index, 1);
+    return newState
+  }
+  if(action.type===GET_LIST){
+    let newState = JSON.parse(JSON.stringify(state))
+    newState.list = action.data.data.list
+    return newState
+  }
+  return state
+}
+
+
+export default x
+
+```
+
+16. Redux-thunk中间件的安装和配置
+- 见图
+- 日志记录，崩溃报告可以放在中间件里
+- 请求不建议放到中间件
+- 利用compose同时配置redux开发者工具和中间件thunk
+```js
+// index.js
+import {createStore, applyMiddleware, compose} from 'redux'
+import reducer from "./reducer"
+import thunk from 'redux-thunk'
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) : compose;
+
+const enhancer = composeEnhancers(applyMiddleware(thunk))
+
+const store = createStore(
+  reducer,
+  enhancer
+)
+export default store
+```
